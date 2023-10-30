@@ -1,0 +1,31 @@
+import utils
+
+# Define source file here.
+ann_file = '/content/drive/MyDrive/Dataset/Flickr8k/Flickr8k_Text/Flickr8k.token.indonesia.txt'
+train_file = '/content/drive/MyDrive/Dataset/Flickr8k/Flickr8k_Text/Flickr_8k.trainImages.txt'
+val_file = '/content/drive/MyDrive/Dataset/Flickr8k/Flickr8k_Text/Flickr_8k.devImages.txt'
+test_file = '/content/drive/MyDrive/Dataset/Flickr8k/Flickr8k_Text/Flickr_8k.testImages.txt'
+output_file = './vocab.txt'
+
+captions = []
+train_lines = open(train_file, "r").readlines()
+val_lines = open(val_file, "r").readlines()
+test_lines = open(test_file, "r").readlines()
+
+with open(ann_file, "r") as ann_f:
+    for line in ann_f:
+        img = line.split('#')[0] + "\n"
+        if (img in train_lines) or (img in val_lines) or (img in test_lines):
+            caption = utils.clean_description(line.replace("-", " ").split()[1:])
+            captions.append(caption)
+
+vocab = []
+for caption in captions:
+    for word in caption:
+        if word not in vocab:
+            vocab.append(word)
+
+print("Vocabulary length: ",len(vocab))
+with open(output_file, "w") as out_f:
+    for word in vocab:
+        out_f.write(word + "\n")
