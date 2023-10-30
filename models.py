@@ -2,6 +2,8 @@ import torch
 import torch.nn as nn
 import torchvision.models as models
 import warnings
+import torch.nn.functional as F
+
 
 # This is the encoder class.
 class Encoder(nn.Module):
@@ -169,10 +171,23 @@ class CausalScaledDotAttention(nn.Module):
         context = attention_weights.transpose(2,1)@v
         return context, attention_weights
 
+class FeedForwardNetworkForLSPE(nn.Module):
+    def __init__(self, embed_dim, units):
+        super(FeedForwardNetwork, self).__init__()
+        self.dense1 = nn.Linear(embed_dim, units)
+        self.dense2 = nn.Linear(units, embed_dim)
+
+    def forward(self, x):
+        x = self.dense1(x)
+        x = F.gelu(x)
+        x = self.dense2(x)
+        return x
+
 
 class TransformerDecoder(nn.Module):
-    def __init__(self, vocab_size, hidden_size, num_layers, num_heads, dropout):
+    def __init__(self, vocab_size, hidden_size, num_layers, num_heads, use_lspe, dropout):
         super(TransformerDecoder, self).__init__()
+        self.use_lspe = use_lspe
         self.vocab_size = vocab_size
         self.hidden_size = hidden_size
 
@@ -204,6 +219,8 @@ class TransformerDecoder(nn.Module):
         self.layernorms2 = nn.ModuleList([nn.LayerNorm([self.hidden_size]) for i in range(self.num_layers)])
         self.layernorms3 = nn.ModuleList([nn.LayerNorm([self.hidden_size]) for i in range(self.num_layers)])
 
+        self.ff_lspe = FeedForwardNetworkForLSPE(hidden_size, hidden_size)
+
     def forward(self, inputs, annotations):
         """
         Forward pass of the attention-based decoder RNN.
@@ -221,8 +238,17 @@ class TransformerDecoder(nn.Module):
         batch_size, seq_len = inputs.size()
         embed = self.embedding(inputs)  # batch_size x seq_len x hidden_size
 
+
+
+        position_enc = self.positional_encodings[:seq_len]
+
+        # whether or not the model will use LSPE
+        if(use_lspe):
+            position_enc = self.ff_lspe(position_enc)
+
+
         # THIS LINE WAS ADDED AS A CORRECTION. 
-        embed = embed + self.positional_encodings[:seq_len]
+        embed = embed + position_enc
         embed = self.dropout(embed)
 
         encoder_attention_weights_list = []
@@ -297,7 +323,7 @@ class EncoderDecoder(nn.Module):
             self, encoder_class, decoder_class,
             target_vocab_size, target_sos=-2, target_eos=-1, encoder_type='resnet18', fine_tune=False, encoder_hidden_size=512,
             decoder_hidden_size=1024, word_embedding_size=1024, attention_dim=512, cell_type='lstm', decoder_type='transformer', beam_width=4, dropout=0.0,
-            transformer_layers=3, num_heads=1):
+            transformer_layers=3, use_lspe = False, num_heads=1):
         """
         Initialize the encoder decoder combo
         """
@@ -307,6 +333,7 @@ class EncoderDecoder(nn.Module):
         self.target_eos = target_eos
         self.encoder_type = encoder_type
         self.fine_tune = fine_tune
+        self.use_lspe = use_lspe
         self.encoder_hidden_size = encoder_hidden_size
         self.decoder_hidden_size = decoder_hidden_size
         self.word_embedding_size = word_embedding_size
@@ -329,6 +356,7 @@ class EncoderDecoder(nn.Module):
                                     self.encoder_hidden_size,
                                     self.transformer_layers,
                                     self.num_heads,
+                                    self.use_lspe,
                                     self.dropout)
 
     def get_target_padding_mask(self, E):

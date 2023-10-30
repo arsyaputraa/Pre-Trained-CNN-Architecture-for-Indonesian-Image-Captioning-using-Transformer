@@ -235,6 +235,7 @@ parser.add_argument('--encoder-type', choices=['resnet18', 'resnet50', 'resnet10
                     default='resnet18',
                     help='Pretrained CNN Network to Use in the Encoder (Default if resnet18)')
 parser.add_argument('--fine-tune', type=int, choices=[0, 1], default=0)
+parser.add_argument('--use-lspe', type=int, choices=[0, 1], default=0)
 parser.add_argument('--beam-width', type=int, default=4)
 parser.add_argument('--num-epochs', type=int, default=35)
 parser.add_argument('--experiment-name', type=str, default="autobestmodel")
@@ -273,6 +274,7 @@ print("Fine tune setting is set to: ", bool(args.fine_tune))
 
 word_embedding_size = 512
 attention_dim = 512
+use_lspe = args.use_lspe
 model_save_path = './model_saves/'
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 lamda = 1.
@@ -317,7 +319,7 @@ model = EncoderDecoder(encoder_class, decoder_class, train_data.vocab_size, targ
                        decoder_hidden_size=decoder_hidden_size,
                        word_embedding_size=word_embedding_size, attention_dim=attention_dim, decoder_type=decoder_type,
                        cell_type='lstm', beam_width=beam_width, dropout=dropout,
-                       transformer_layers=transformer_layers, num_heads=heads)
+                       transformer_layers=transformer_layers, use_lspe=use_lspe, num_heads=heads)
 
 optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate,
                              betas=(beta1, beta2))  # Used to experiment with (0.9, 0.98) for transformer
