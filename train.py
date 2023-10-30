@@ -300,7 +300,7 @@ if not os.path.isdir(model_save_path):
     os.mkdir(model_save_path)
 
 # Creating datasets
-train_data = Flickr8kDataset(img_dir, train_dir, ann_dir, vocab_file)
+train_data = Flickr8kDataset(img_dir, train_dir, ann_dir, vocab_file, True)
 val_data = eval.TestDataset(img_dir, val_dir, ann_dir, vocab_file)
 test_data = eval.TestDataset(img_dir, test_dir, ann_dir, vocab_file)
 

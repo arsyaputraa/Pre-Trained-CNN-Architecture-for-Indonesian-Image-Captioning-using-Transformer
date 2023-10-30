@@ -34,7 +34,7 @@ class Encoder(nn.Module):
         :return: encoded images
         """
         out = self.pretrained_cnn(images)  # (batch_size, 2048, image_size/32, image_size/32)
-        # out = self.adaptive_pool(out)  # (batch_size, 2048, encoded_image_size, encoded_image_size)
+        out = self.adaptive_pool(out)  # (batch_size, 2048, encoded_image_size, encoded_image_size)
         out = torch.flatten(out,2,3)  #(batch_size, 2048, encoded_image_size * encoded_image_size)
         out = out.permute(2, 0, 1)  # (encoded_image_size * encoded_image_size, batch_size, 2048)
         return out
