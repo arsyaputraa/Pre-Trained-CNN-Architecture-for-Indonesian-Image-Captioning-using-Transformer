@@ -173,7 +173,7 @@ class CausalScaledDotAttention(nn.Module):
 
 class FeedForwardNetworkForLSPE(nn.Module):
     def __init__(self, embed_dim, units):
-        super(FeedForwardNetwork, self).__init__()
+        super(FeedForwardNetworkForLSPE, self).__init__()
         self.dense1 = nn.Linear(embed_dim, units)
         self.dense2 = nn.Linear(units, embed_dim)
 
