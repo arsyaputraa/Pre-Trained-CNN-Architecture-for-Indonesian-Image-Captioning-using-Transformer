@@ -24,7 +24,7 @@ warnings.filterwarnings('ignore')
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 # print(device)
 
-img_dir = '../input/flickr8k/'
+img_dir = '../input/flickr8k/Images/'
 ann_dir = '../input/flickr8k-text/Flickr8k.token.indonesia.txt'
 train_dir = '../input/flickr8k-text/Flickr_8k.trainImages.txt'
 val_dir = '../input/flickr8k-text/Flickr_8k.devImages.txt'

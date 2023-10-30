@@ -18,7 +18,7 @@ import argparse
 from models import *
 
 # Define source file here.
-img_dir = '../input/flickr8k/'
+img_dir = '../input/flickr8k/Images/'
 ann_dir = '../input/flickr8k-text/Flickr8k.token.indonesia.txt'
 train_dir = '../input/flickr8k-text/Flickr_8k.trainImages.txt'
 val_dir = '../input/flickr8k-text/Flickr_8k.devImages.txt'
