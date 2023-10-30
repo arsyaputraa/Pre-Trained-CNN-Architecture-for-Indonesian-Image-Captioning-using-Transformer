@@ -1,10 +1,10 @@
 import utils
 
 # Define source file here.
-ann_file = '/content/drive/MyDrive/Dataset/Flickr8k/Flickr8k_Text/Flickr8k.token.indonesia.txt'
-train_file = '/content/drive/MyDrive/Dataset/Flickr8k/Flickr8k_Text/Flickr_8k.trainImages.txt'
-val_file = '/content/drive/MyDrive/Dataset/Flickr8k/Flickr8k_Text/Flickr_8k.devImages.txt'
-test_file = '/content/drive/MyDrive/Dataset/Flickr8k/Flickr8k_Text/Flickr_8k.testImages.txt'
+ann_file = '../input/flickr8k-text/Flickr8k.token.indonesia.txt'
+train_file = '../input/flickr8k-text/Flickr_8k.trainImages.txt'
+val_file = '../input/flickr8k-text/Flickr_8k.devImages.txt'
+test_file = '../input/flickr8k-text/Flickr_8k.testImages.txt'
 output_file = './vocab.txt'
 
 captions = []
