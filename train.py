@@ -50,7 +50,7 @@ class Flickr8kDataset(Dataset):
 
         if (transform == None):
             self.transform = transforms.Compose([
-                transforms.Resize((224, 224)),
+                transforms.Resize((299, 299)),
                 # transforms.CenterCrop(224),
                 transforms.ToTensor(),
                 transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
@@ -147,7 +147,7 @@ def predict(model, device, image_name):
     image_path = os.path.join(img_dir, image_name)
     image = Image.open(image_path)
     transform = transforms.Compose([
-        transforms.Resize((224, 224)),
+        transforms.Resize((299, 299)),
         # transforms.CenterCrop(224),
         transforms.ToTensor(),
         transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
