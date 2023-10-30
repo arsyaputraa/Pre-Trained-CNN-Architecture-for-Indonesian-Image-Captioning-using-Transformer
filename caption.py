@@ -48,7 +48,7 @@ class Flickr8kDataset(Dataset):
         self.vocab_size = None
         self.image_file_names, self.captions, self.tokenized_captions = self.tokenizer(self.split_dir, self.ann_dir)
         if (transform == None):
-            self.transform = transforms.Compose([
+            transform = transforms.Compose([
                 transforms.Resize((299, 299)),
                 # transforms.CenterCrop(224),
                 transforms.ToTensor(),
