@@ -24,11 +24,11 @@ warnings.filterwarnings('ignore')
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 # print(device)
 
-img_dir = '/content/drive/MyDrive/Dataset/Flickr8k/Flickr8k_Image/'
-ann_dir = '/content/drive/MyDrive/Dataset/Flickr8k/Flickr8k_Text/Flickr8k.token.indonesia.txt'
-train_dir = '/content/drive/MyDrive/Dataset/Flickr8k/Flickr8k_Text/Flickr_8k.trainImages.txt'
-val_dir = '/content/drive/MyDrive/Dataset/Flickr8k/Flickr8k_Text/Flickr_8k.devImages.txt'
-test_dir = '/content/drive/MyDrive/Dataset/Flickr8k/Flickr8k_Text/Flickr_8k.testImages.txt'
+img_dir = '../input/flickr8k/'
+ann_dir = '../input/flickr8k-text/Flickr8k.token.indonesia.txt'
+train_dir = '../input/flickr8k-text/Flickr_8k.trainImages.txt'
+val_dir = '../input/flickr8k-text/Flickr_8k.devImages.txt'
+test_dir = '../input/flickr8k-text/Flickr_8k.testImages.txt'
 vocab_file = './vocab.txt'
 
 SEED = 123
